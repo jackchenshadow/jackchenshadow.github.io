@@ -69,7 +69,8 @@
       console.log(message);
       update(message.data);
     });
-
+    
+    new Promise(resolve => setTimeout(resolve, 2000)).then(() => publish("requestUiUpdate", {}));
 
 
     function publish(name, data) {
@@ -170,8 +171,6 @@
         const jsonObj = JSON.parse(jsonDoc);
         createTable(document.getElementById("mainTable"), jsonObj)
     }
-
-    publish("requestUiUpdate", {})
 
 </script>
 </body>

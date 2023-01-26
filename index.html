@@ -171,6 +171,16 @@
         const jsonObj = JSON.parse(jsonDoc);
         createTable(document.getElementById("mainTable"), jsonObj)
     }
+    
+    
+    const urlParams = new URLSearchParams(window.location.search);
+
+    const cha = urlParams.get('cha');
+    console.log(cha);
+
+    const key = urlParams.get('key');
+    console.log(key);
+    
 
 </script>
 </body>

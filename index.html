@@ -4,6 +4,7 @@
     <title>controlpad</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdn.ably.com/lib/ably.min-1.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/aes.js" integrity="sha256-/H4YS+7aYb9kJ5OKhFYPUjSJdrtV6AeyJOtTkw6X72o=" crossorigin="anonymous"></script>
     <style>
         body {
             background-color: #ffffff;
@@ -58,8 +59,11 @@
 </table>
 
 <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const passwd = urlParams.get('passwd');
+    const encryptedApikey = 'U2FsdGVkX186Pv9rPjQMx9YsDdWQxv+Wj4qXFPDqQ03zHOAdlZyY1eJlXZTkiISmcRF+T1xqj/fQiwIIJgsyEg60wCl2mNrD046t4/di9Jc='
 
-    const ably = new Ably.Realtime.Promise('42ByJQ.mnyIsg:TxvKQTfIvfHUM8y91rA-o3hYp1NYlZSgiiMWoQoMO1k');
+    const ably = new Ably.Realtime.Promise(CryptoJS.AES.decrypt(encryptedApikey, passwd).toString(CryptoJS.enc.Utf8));
     ably.connection.once('connected');
     console.log('Connected to Ably!');
 
@@ -69,9 +73,8 @@
       console.log(message);
       update(message.data);
     });
-    
-    new Promise(resolve => setTimeout(resolve, 2000)).then(() => publish("requestUiUpdate", {}));
 
+    new Promise(resolve => setTimeout(resolve, 2000)).then(() => publish("requestUiUpdate", {}));
 
     function publish(name, data) {
       data.time = Date.now();
@@ -171,16 +174,8 @@
         const jsonObj = JSON.parse(jsonDoc);
         createTable(document.getElementById("mainTable"), jsonObj)
     }
-    
-    
-    const urlParams = new URLSearchParams(window.location.search);
 
-    const cha = urlParams.get('cha');
-    console.log(cha);
 
-    const key = urlParams.get('key');
-    console.log(key);
-    
 
 </script>
 </body>
